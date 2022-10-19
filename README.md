@@ -1,9 +1,9 @@
 # count_vowels
 Count Vowels - Simple C Program - But not simple in anyway possible.
 
-Basically this program is not simple and involves deep understanding of the multi-threaded concepts, file locking mechanisms of unix and inter-process communication techniques.\
+Basically this program is not simple and involves deep understanding of the multi-threaded concepts, file locking mechanisms of unix and inter-process communication techniques.
 
-First things first --  would be to just read a file (Path specified in command line) and return number of vowels.\
+First things first --  would be to just read a file (Path specified in command line) and return number of vowels.
 
 count_vowels:\
 Open specified file and get the file Pointer.\
@@ -51,7 +51,7 @@ Design choice to AVOID MANDATORY LOCKS:
  6. There is **another design constraint** that we need to know which is all processes must use fcntl to acquire locks because it may be possible that other processes use other system api such as flock() to get locks and it is possible that they get that lock. This will also result in data race.
  7. Quick digression -- note that manual page will have indexed fcntl(2) and flock(2). 2 indicates they are system calls.
  
- Now, we address scalability and handling large files:\
+ Now, we address scalability and handling large files:
  
 We could potentially create multiple threads based on the size of the files and read them in parallel and return the end result of sum of vowels of all threads, this would mean that very large files can be processed quicker than you would do it sequentially.\
 fcntl() allows byte locks, where we set the start position and length -- (along with whence -- Reference position). We could obtain a write lock and then read those bytes and return to the main process which waits for the threads to complete the work.\
