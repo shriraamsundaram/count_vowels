@@ -10,10 +10,10 @@ Open specified file and get the file Pointer.\
 Check if file Pointer is not null.\
 Get each character from file using fgetc (FILE GET CHARACTER) until EOF (EOF) and process the obtained character in switch case statement.\
 We have to increment the count for cases 'a', 'e', 'i', 'o', u and 'A', 'E', 'I', 'O', 'U' (the problem statement skipped mentioning Uppercase- seemed intentional).\
-But on a grand scheme of things, even if the developer misses this subtle uppercase information, there are so many other things to focus on to evaluate the assignment.\
+But on a grand scheme of things, even if the developer misses this subtle uppercase information, there are so many other things to focus on to evaluate the assignment.
 
-1. We create a fairly small file and test this.\
-2. It probably works too.\
+1. We create a fairly small file and test this.
+2. It probably works too.
 
 
 Now, we address the REAL PROBLEM:
