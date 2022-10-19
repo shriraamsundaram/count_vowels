@@ -6,14 +6,14 @@ Basically this program is not simple and involves deep understanding of the mult
 First things first --  would be to just read a file (Path specified in command line) and return number of vowels.
 
 count_vowels:
-Open specified file and get the file Pointer.
-Check if file Pointer is not null.
-Get each character from file using fgetc (FILE GET CHARACTER) until EOF (EOF) and process the obtained character in switch case statement.
-We have to increment the count for cases 'a', 'e', 'i', 'o', u and 'A', 'E', 'I', 'O', 'U' (the problem statement skipped mentioning Uppercase- seemed intentional).
-But on a grand scheme of things, even if the developer misses this subtle uppercase information, there are so many other things to focus on to evaluate the assignment.
+Open specified file and get the file Pointer.\
+Check if file Pointer is not null.\
+Get each character from file using fgetc (FILE GET CHARACTER) until EOF (EOF) and process the obtained character in switch case statement.\
+We have to increment the count for cases 'a', 'e', 'i', 'o', u and 'A', 'E', 'I', 'O', 'U' (the problem statement skipped mentioning Uppercase- seemed intentional).\
+But on a grand scheme of things, even if the developer misses this subtle uppercase information, there are so many other things to focus on to evaluate the assignment.\
 
-1. We create a fairly small file and test this.
-2. It probably works too.
+1. We create a fairly small file and test this.\
+2. It probably works too.\
 
 
 Now, we address the REAL PROBLEM:
@@ -41,6 +41,19 @@ Design choice to AVOID MANDATORY LOCKS:
 5. Linux Manual Page says "Warning: the Linux implementation of mandatory locking is unreliable.  See BUGS below.  Because of these bugs, and the fact
    that the feature is believed to be little used, since Linux 4.5, mandatory locking has been made an optional feature, governed by
    a configuration option (CONFIG_MANDATORY_FILE_LOCKING). **This is an initial step toward removing this feature completely.**
+   
+ ADIVSORY_LOCKS:
+ 1. Advisory locks are co-operative locks, meaning, they are not enforced by the system.
+ 2. When a process acquires a lock, another process can still have access by directly using the system call, this means that the process used the system call which is not a design choice (i.e. Non-cooperative way).
+ 3. Since Problem Statements recommends following POSIX Convention combined with unix philosophy, we are not left with many choices, flock and fcntl seem valid.
+ 4. The problem with flock is that when the process is forked the locks are also copied along with it (because that is what fork means really). This would mean there will not be any synchronization or concurrency among the child and parent processes.
+ 5. To overcome this trouble, we have fcntl() that allows us to lock files (UNIX philosophy, portable and following POSIX Convention).
+ 6. There is **another design constraint** that we need to know which is all processes must use fcntl to acquire locks because it may be possible that other processes use other system api such as flock to get locks and it is possible that they get that lock. This will also result in data race.
+ 
+ Now, we address scalability and handling large files:
+ 
+ 
+
 
 
 
