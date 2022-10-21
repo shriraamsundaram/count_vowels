@@ -54,7 +54,6 @@ void bfs (void(*pf)(const char *), const char * fileToSearch)
 		/* Get each directory entry which returns an entry pointer for further processing */
 		while ((entryPtr = readdir (directoryPtr)) != NULL)
 		{
-			entryPtr->d_off
 		  puts (entryPtr->d_name);
 		  if (strstr(entryPtr->d_name, fileToSearch) )
 		  {
