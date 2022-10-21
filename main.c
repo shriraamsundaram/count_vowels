@@ -4,16 +4,21 @@
  *  Created on: 19 Oct 2022
  *      Author: shriraam-sundaram
  */
+#define _XOPEN_SOURCE 700
+#include <ftw.h>
+
 #include <stdio.h>
 #include <stdint.h>
 #include <inttypes.h>
 #include <pthread.h>
-#include <ftw.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <dirent.h>
 #include "count_vowels.h"
-
-#define _XOPEN_SOURCE 500
 
 
 static int display_info(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
@@ -27,19 +32,68 @@ static int display_info(const char *fpath, const struct stat *sb, int tflag, str
     return 0;
 }
 
+void pf(const char * fileName)
+{
+	if(strstr(fileName, "findMe.txt"))
+	{
+		printf("call back called \n");
+		printf("Match found!\n");
+	}
+}
+
+void bfs (void(*pf)(const char *), const char * fileToSearch)
+{
+	DIR *directoryPtr;
+	struct dirent *entryPtr;
+
+	/*Get directory pointer of the said directory*/
+	directoryPtr = opendir ("/home/shriraam-sundaram/find/");
+
+	if (directoryPtr != NULL)
+	{
+		/* Get each directory entry which returns an entry pointer for further processing */
+		while ((entryPtr = readdir (directoryPtr)) != NULL)
+		{
+			entryPtr->d_off
+		  puts (entryPtr->d_name);
+		  if (strstr(entryPtr->d_name, fileToSearch) )
+		  {
+			  pf(entryPtr->d_name);
+		  }
+		}
+
+		(void) closedir (directoryPtr);
+		return;
+	}
+	else
+	{
+		perror ("Couldn't open the directory");
+		return;
+	}
+}
+
 int main(int argc, char ** argv)
 {
 	printf("Hello World! \n");
 	printf("%s \n", argv[1]);
 
+	bfs(pf, argv[1]);
+	return 0;
+
+#if 0
+	/*Remember where we are*/
+	int fd = open(".", O_RDONLY);
+	chdir("/");
+	fchdir(fd);
+	close(fd);
 	/* If a starting directory isn't specified, use the current dir */
-	if (nftw((argc < 2) ? "/" : argv[1], display_info, 20, 0) == -1)
+	if (nftw("/home", display_info, 20, 0) == -1)
 	{
 		printf("Error could not find file");
 
 	}
-	return 0;
-#if 0
+
+
 	pthread_t thread1, thread2;
 
 	uint64_t thread1VowelCount = 0u;
