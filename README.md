@@ -68,6 +68,8 @@ The input file could be of any format as specfied in the assignment, this would 
 Processing of text files are different from binary files as the text files store data in chars and binary store data in bits. In text file format each character's ASCII will be stored.
 
 getc() will read 8 bits each time convert that to ASCII and then convert the ASCII to char. In binary file, data are not taken as characters. For instance, a file containing the characters "a54321". Chars are stored in 8 bit but 54321 will be treated as 4 byte as whole. So when the data is read back character by character we may not read back the correct characters. Specifically because some values may have the signed bit sit and if the signed bit is set the character becomes gibberish, also reading the value back as 8bit will not exactly represent the actual data that was intended for storage.
+\
+Also Text file has EOF entry which is -1 in the endof the file, but this is not the case for binary file.
 
 
 
