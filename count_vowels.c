@@ -4,7 +4,9 @@
  *  Created on: 19 Oct 2022
  *      Author: shriraam-sundaram
  */
-
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,23 +18,18 @@ void* count_vowels(void * args)
 {
 	COUNT_VOWEL_ThreadArgs_t * arguments = (COUNT_VOWEL_ThreadArgs_t *)args;
 	const char * fileName = arguments->fileName;
-	const char * mode = "r";
 
 	uint64_t numVowels = 0u;
 	char ch;
-	FILE *fp = fopen(fileName, mode);
+	int fd = open(fileName, O_RDONLY);
 
-	if(NULL != fp)
+	if(E_NOT_OK != fd)
 	{
-		fseek(fp, arguments->startIndex, SEEK_SET);
+		lseek(fd, arguments->startIndex, SEEK_SET);
 
 		for(uint64_t i = 0u; i < (arguments->endIndex - arguments->startIndex); i++)
 		{
-			ch = getc(fp);
-			if(feof(fp))
-			{
-				break;
-			}
+			read(fd, &ch, 1);
 			switch(ch)
 			{
 				case 'a':
@@ -51,7 +48,7 @@ void* count_vowels(void * args)
 					break;
 			}
 		}
-		fclose(fp);
+		close(fd);
 	}
 	*(arguments->result) = numVowels;
 	return NULL;

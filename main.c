@@ -116,7 +116,7 @@ int main(int argc, char ** argv)
 			else
 			{
 				uint64_t beginThread1 =0;
-				uint64_t endThread1 = size/2;
+				uint64_t endThread1 = size/2u;
 				uint64_t beginThread2 = endThread1;
 				uint64_t endThread2 = size;
 
