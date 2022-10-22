@@ -69,7 +69,7 @@ Processing of text files are different from binary files as the text files store
 
 Also Text file has EOF entry which is a macro that returns -1 in the end of the file, but this is not the case for binary file.\
 Hence it is better if we used open(2) for opening the file, read(2) for reading the file and close(2) for closing the file.\
-Use lseek() to change the position of file descriptor and read byte-by-byte. This reading byte by byte could be fairly slower than reading large chunks of data, but saves memory. Use fstat() to determine the size of the file.\
+Use lseek() to change the position of file descriptor and read byte-by-byte. This reading byte by byte could be fairly slower than reading large chunks of data, but saves memory. Use fstat() to determine the size of the file.
 
 We also assume that the size requested to read by a single thread is **less than SSIZE_MAX macro** defined which is approximately 2GB. To handle cases beyond this is not within the scope of the assignment.
 
