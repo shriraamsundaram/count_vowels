@@ -9,7 +9,7 @@ count_vowels:\
 Open specified file and get the file Pointer.\
 Check if file Pointer is not null.\
 Get each character from file using fgetc (FILE GET CHARACTER) until EOF (EOF) and process the obtained character in switch case statement.\
-We have to increment the count for cases 'a', 'e', 'i', 'o', u and 'A', 'E', 'I', 'O', 'U' (the problem statement skipped mentioning Uppercase- seemed intentional).\
+We have to increment the count for cases 'a', 'e', 'i', 'o', u and 'A', 'E', 'I', 'O', 'U' (the problem statement skipped mentioning Uppercase- seemed intentional).
 
 1. We create a fairly small file and test this.
 2. It probably works too.
@@ -56,7 +56,7 @@ Design choice to AVOID MANDATORY LOCKS:
  
 We could potentially create multiple threads based on the size of the files and read them in parallel and return the end result of sum of vowels of all threads, this would mean that very large files can be processed quicker than you would do it sequentially.\
 fcntl() allows byte locks, where we set the start position and length -- (along with whence -- Reference position). We could obtain a write lock and then read those bytes and return to the main process which waits for the threads to complete the work.\
-But for small files, we just need one worker thread. Deciding on number of worker threads and where to create more threads seems beyond the scope of the assignment.\
+But for small files, we just need one worker thread. Deciding on number of worker threads and where to create more threads seems beyond the scope of the assignment.
 
 
 
