@@ -45,9 +45,9 @@ void bfs (void(*pf)(const char *), const char * fileToSearch)
 	if (directoryPtr != NULL)
 	{
 		/* Get each directory entry which returns an entry pointer for further processing */
-		while ((entryPtr = readdir (directoryPtr)) != NULL)
+		while((entryPtr = readdir(directoryPtr)) != NULL)
 		{
-		  puts (entryPtr->d_name);
+		  puts(entryPtr->d_name);
 		  if (strstr(entryPtr->d_name, fileToSearch) )
 		  {
 			  pf(entryPtr->d_name);
@@ -59,7 +59,7 @@ void bfs (void(*pf)(const char *), const char * fileToSearch)
 	}
 	else
 	{
-		perror ("Couldn't open the directory");
+		printf("Couldn't open the directory");
 		return;
 	}
 }
@@ -82,12 +82,21 @@ int main(int argc, char ** argv)
 		int thread1Ret = 0;
 		int thread2Ret = 0;
 		int fd = -1;
+		off_t size = 0;
 		struct flock region;
 
 		fd = open("/home/shriraam-sundaram/find/test/findMe.txt", O_RDONLY);
 
 		if(fd != -1)
 		{
+			/* To get the file statistics which will include file size */
+			struct stat fileStats;
+
+			if(E_NOT_OK != fstat(fd, &fileStats))
+			{
+				size = fileStats.st_size;
+			}
+
 			/*We apply read lock*/
 			region.l_type = F_RDLCK;
 
@@ -102,14 +111,18 @@ int main(int argc, char ** argv)
 
 			if(E_NOT_OK == fcntl(fd, F_SETLK, &region))
 			{
-				printf("Could not obtain lock \n");
+				printf("Could not obtain lock \n"); // We could add retry mechanisms.
 			}
 			else
 			{
+				uint64_t beginThread1 =0;
+				uint64_t endThread1 = size/2;
+				uint64_t beginThread2 = endThread1;
+				uint64_t endThread2 = size;
 
 				/*Create worker threads to complete the job*/
-				thread1Ret = pthread_create( &thread1, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], 1, 5,  &thread1VowelCount})));
-				thread2Ret = pthread_create( &thread2, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], 6, 11, &thread2VowelCount})));
+				thread1Ret = pthread_create( &thread1, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], beginThread1, endThread1,  &thread1VowelCount})));
+				thread2Ret = pthread_create( &thread2, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], beginThread2, endThread2, &thread2VowelCount})));
 
 
 				/*Wait until the worker thread completes its job*/
