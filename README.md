@@ -61,8 +61,15 @@ But for small files, we just need one worker thread. Deciding on number of worke
 FINDING THE FILE:\
 The simple C states that the fileName will be provided as a command line argument. This doesn't explicitly state that the absolute path will be a part of the fileName. File systems start at the root folder for almost all unix systems. This is a good assumption to make because we have to start somewhere to search for a file. Files are n-ary trees data structure wise. A binary tree has utmost 2 children. An n-ary would have n children possible. To traverse a tree we have bfs and dfs. (Preorder, postorder and inorder traversal). Thus we need some kind of a file tree walk as files and directories are stored as trees. We have nftw(3) supporting file tree walk, but we will not be using this as this directly implements the search. We will have to perform bfs from the root to reach the possible file. To read a directory and get the possible list of directories we require readdir(3). readdir is also a library function but this does not implement the traversal directly which is well within the rules of the simple C assignment.
 
-One more problem we face is that the assignment never mentions that the fileName will be unique, therefore to address this we provide the fileName back to the user in a callback and let the user decide what to do with it.
+One more problem we face is that the assignment never mentions that the fileName will be unique, therefore to address this we provide the fileName back to the user in a callback and let the user decide what to do with it. We could avoid a lot of code if the assignment simply gives us the flexibility to find the file using library function or just gives us the absolute path of the file, if the whole point of assignment is not to evaluate my understanding of tree traversals and the complexity of it.
 
+TYPE OF FILE:\
+The input file could be of any format as specfied in the assignment, this would mean that the file can be text file; it could be binary format also.
+Processing of text files are different from binary files as the text files store data in chars and binary store data in bits. In text file format each character's ASCII will be stored.
+
+getc() will read 8 bits each time convert that to ASCII and then convert the ASCII to char. In binary file, data are not taken as characters. For instance, a file containing the characters "a54321". Chars are stored in 8 bit but 54321 will be treated as 4 byte as whole. So when the data is read back character by character we may not read back the correct characters. Specifically because some values may have the signed bit sit and if the signed bit is set the character becomes gibberish, also reading the value back as 8bit will not exactly represent the actual data that was intended for storage.
+\
+Also Text file has EOF entry which is -1 in the endof the file, but this is not the case for binary file.
 
 
 
