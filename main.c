@@ -5,6 +5,7 @@
  *      Author: shriraam-sundaram
  */
 #define _XOPEN_SOURCE 700
+#define E_NOT_OK (-1)
 #include <ftw.h>
 
 #include <stdio.h>
@@ -39,7 +40,7 @@ void bfs (void(*pf)(const char *), const char * fileToSearch)
 	struct dirent *entryPtr;
 
 	/*Get directory pointer of the said directory*/
-	directoryPtr = opendir ("/home/shriraam-sundaram/find/");
+	directoryPtr = opendir ("/home/shriraam-sundaram/find/test/");
 
 	if (directoryPtr != NULL)
 	{
@@ -69,8 +70,8 @@ int main(int argc, char ** argv)
 	printf("%s \n", argv[1]);
 
 	bfs(pf, argv[1]);
-	return 0;
 
+	fileFound = true;
 
 	if(fileFound)
 	{
@@ -80,20 +81,51 @@ int main(int argc, char ** argv)
 		uint64_t thread2VowelCount = 0u;
 		int thread1Ret = 0;
 		int thread2Ret = 0;
+		int fd = -1;
+		struct flock region;
 
-		/*Create worker threads to complete the job*/
-		thread1Ret = pthread_create( &thread1, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], 1, 5,  &thread1VowelCount})));
-		thread2Ret = pthread_create( &thread2, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], 6, 11, &thread2VowelCount})));
+		fd = open("/home/shriraam-sundaram/find/test/findMe.txt", O_RDONLY);
+
+		if(fd != -1)
+		{
+			/*We apply read lock*/
+			region.l_type = F_RDLCK;
+
+			/*Relative position --It defines the offset to which l_start, the first byte in the region*/
+			region.l_whence = SEEK_SET;
+			region.l_start = 0;
+
+			/*Length 0 means the whole file is locked for read*/
+			region.l_len = 0;
+			region.l_pid = -1;
 
 
-		/*Wait until the worker thread completes its job*/
-		pthread_join(thread1, NULL);
-		pthread_join(thread2, NULL);
+			if(E_NOT_OK == fcntl(fd, F_SETLK, &region))
+			{
+				printf("Could not obtain lock \n");
+			}
+			else
+			{
 
-		printf("Value of thread 1: ""%" PRIu64 "\n", thread1VowelCount);
-		printf("Value of thread 2: ""%" PRIu64 "\n", thread2VowelCount);
-		printf("Result : ""%" PRIu64 "\n", thread1VowelCount + thread2VowelCount);
+				/*Create worker threads to complete the job*/
+				thread1Ret = pthread_create( &thread1, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], 1, 5,  &thread1VowelCount})));
+				thread2Ret = pthread_create( &thread2, NULL, count_vowels, (void *)(&((COUNT_VOWEL_ThreadArgs_t){argv[1], 6, 11, &thread2VowelCount})));
 
+
+				/*Wait until the worker thread completes its job*/
+				pthread_join(thread1, NULL);
+				pthread_join(thread2, NULL);
+
+				printf("Value of thread 1: ""%" PRIu64 "\n", thread1VowelCount);
+				printf("Value of thread 2: ""%" PRIu64 "\n", thread2VowelCount);
+				printf("Result : ""%" PRIu64 "\n", thread1VowelCount + thread2VowelCount);
+			}
+			region.l_type = F_UNLCK;
+			if(E_NOT_OK == fcntl(fd, F_SETLK, &region))
+			{
+				printf("FAILED TO UNLOCK\n");
+			}
+		}
 	}
 	return 0;
 }
