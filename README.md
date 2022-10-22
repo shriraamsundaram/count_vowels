@@ -8,7 +8,7 @@ First things first --  would be to just read a file (Path specified in command l
 count_vowels:\
 Open specified file and get the file Pointer.\
 Check if file Pointer is not null.\
-Get each character from file using fgetc (FILE GET CHARACTER) until EOF (EOF) and process the obtained character in switch case statement.\
+Get each character from file using fgetc (FILE GET CHARACTER) until EOF (End Of File macro) and process the obtained character in switch case statement.\
 We have to increment the count for cases 'a', 'e', 'i', 'o', u and 'A', 'E', 'I', 'O', 'U' (the problem statement skipped mentioning Uppercase- seemed intentional).
 
 1. We create a fairly small file and test this.
@@ -69,7 +69,7 @@ Processing of text files are different from binary files as the text files store
 
 Also Text file has EOF entry which is a macro that returns -1 in the end of the file, but this is not the case for binary file.\
 Hence it is better if we used open(2) for opening the file, read(2) for reading the file and close(2) for closing the file.\
-Use lseek() to change the position of file descriptor and read byte-by-byte. This reading byte by byte could be fairly slower than reading large chunks of data, but saves memory. Use fstat() to determine the size of the file.\
+Use lseek() to change the position of file descriptor and read byte-by-byte. This reading byte by byte could be fairly slower than reading large chunks of data, but saves memory. Use fstat() to determine the size of the file.
 
 
 
