@@ -45,7 +45,7 @@ Design choice to AVOID MANDATORY LOCKS:
    
  ADIVSORY_LOCKS:
  1. Advisory locks are co-operative locks, meaning, they are not enforced by the system.
- 2. When a process acquires a lock, another process can still have access by directly using the system call, this means that the process used the system call which is not a design choice (i.e. Non-cooperative way).
+ 2. When a process acquires a lock on a file, another process can still gain access to the file by directly using the system call, this means that the process used the system call which is not a design choice (i.e. Non-cooperative way).
  3. Since Problem Statements recommends following POSIX Convention combined with unix philosophy, we are not left with many choices, flock and fcntl seem valid.
  4. The problem with flock() is that when the process is forked the locks are also copied along with it (because that is what fork means really). This would mean there will not be any synchronization or concurrency among the child and parent processes.
  5. To overcome this trouble, we have fcntl() that allows us to lock files (UNIX philosophy, portable and following POSIX Convention).
