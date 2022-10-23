@@ -55,8 +55,8 @@ Design choice to AVOID MANDATORY LOCKS:
  Now, we address scalability and handling large files:
  
 We could potentially create multiple threads based on the size of the files and read them in parallel and return the end result of sum of vowels of all threads, this would mean that very large files can be processed quicker than you would do it sequentially.\
-fcntl() allows byte locks, where we set the start position and length -- (along with whence -- Reference position). We could obtain a write lock and then read those bytes and return to the main process which waits for the threads to complete the work.\
-But for small files, we just need one worker thread. Deciding on number of worker threads and where to create more threads seems beyond the scope of the assignment.
+fcntl() allows byte locks, where we set the start position and length -- (along with whence -- Reference position). We could obtain a read lock and then read those bytes and return to the main process which waits for the threads to complete the work.\
+But for small files, we just need one worker thread. Deciding on number (tuning) of worker threads and where to create more threads seems beyond the scope of the assignment.
 
 FINDING THE FILE:\
 The simple C states that the fileName will be provided as a command line argument. This doesn't explicitly state that the absolute path will be a part of the fileName. File systems start at the root folder for almost all unix systems. Files are n-ary trees data structure wise. A binary tree has utmost 2 children. An n-ary would have n children possible. To traverse a tree we have bfs and dfs. (Preorder, postorder and inorder traversal). Thus we need some kind of a file tree walk as files and directories are stored as trees, if we wanted to do this as a separate assignment. We have nftw(3) supporting file tree walk, but we will not be using this as this directly implements the search. We will have to perform bfs from the root to reach the possible file. To read a directory and get the possible list of directories we require readdir(3). 
