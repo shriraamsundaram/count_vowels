@@ -88,7 +88,7 @@ mmap() is very fast because it has no context switch overhead or doesn't incur a
 
 But, the problem is mmap() reserves the address space for the entire file, this would mean that in 32 bit systems with a 32 bit address space, a very large file being memory mapped can result in fragmentation of the address space. Though, this problem is less obvious in 64 bit systems. Our goal was to create a portable code, hence I have avoided mmap() in the implementation.
 
-A small files such as 10 bytes will have serious issue of memory wasted. This is because a 10 byte mapping can still cost a reservation of 4089 bytes, this difference of memory is called slack space and it is wasted in case of mmap().
+A small files such as 10 bytes will have serious issue of memory wasted. This is because a 10 byte mapping can still cost a reservation of 4089 bytes, this difference of memory is called slack space and it is wasted in case of mmap(). this is because the basic granularity of the mmap is in Pages, so even if a file is 10 bytes a full page is reserved. 
 
 There are other things that I can discuss but due to time constraints we are leaving at that here.
 
