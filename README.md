@@ -59,9 +59,9 @@ fcntl() allows byte locks, where we set the start position and length -- (along 
 But for small files, we just need one worker thread. Deciding on number of worker threads and where to create more threads seems beyond the scope of the assignment.
 
 FINDING THE FILE:\
-The simple C states that the fileName will be provided as a command line argument. This doesn't explicitly state that the absolute path will be a part of the fileName. File systems start at the root folder for almost all unix systems. This is a good assumption to make because we have to start somewhere to search for a file. Files are n-ary trees data structure wise. A binary tree has utmost 2 children. An n-ary would have n children possible. To traverse a tree we have bfs and dfs. (Preorder, postorder and inorder traversal). Thus we need some kind of a file tree walk as files and directories are stored as trees. We have nftw(3) supporting file tree walk, but we will not be using this as this directly implements the search. We will have to perform bfs from the root to reach the possible file. To read a directory and get the possible list of directories we require readdir(3). readdir is also a library function but this does not implement the traversal directly which is well within the rules of the simple C assignment.
+The simple C states that the fileName will be provided as a command line argument. This doesn't explicitly state that the absolute path will be a part of the fileName. File systems start at the root folder for almost all unix systems. Files are n-ary trees data structure wise. A binary tree has utmost 2 children. An n-ary would have n children possible. To traverse a tree we have bfs and dfs. (Preorder, postorder and inorder traversal). Thus we need some kind of a file tree walk as files and directories are stored as trees, if we wanted to do this as a separate assignment. We have nftw(3) supporting file tree walk, but we will not be using this as this directly implements the search. We will have to perform bfs from the root to reach the possible file. To read a directory and get the possible list of directories we require readdir(3). 
 
-One more problem we face is that the assignment never mentions that the fileName will be unique, therefore to address this we provide the fileName back to the user in a callback and let the user decide what to do with it. We could avoid a lot of code if the assignment simply gives us the flexibility to find the file using library function or just gives us the absolute path of the file, if the whole point of assignment is not to evaluate my understanding of tree traversals and the complexity of it.
+Having said this, we will assume that the absolute path is available to us as input and proceed. As the evaluator thinks, I should be focusing on parsing the file not the implementation of finding the file.
 
 TYPE OF FILE:\
 The input file could be of any format as specfied in the assignment, this would mean that the file can be text file; it could be binary format also.
@@ -72,6 +72,15 @@ Hence it is better if we used open(2) for opening the file, read(2) for reading 
 Use lseek() to change the position of file descriptor and read byte-by-byte. This reading byte by byte could be fairly slower than reading large chunks of data, but saves memory. Use fstat() to determine the size of the file.
 
 We also assume that the size requested to read by a single thread is **less than SSIZE_MAX macro** defined which is approximately 2GB. To handle cases beyond this is not within the scope of the assignment.
+
+So, I introduced multi-threaded using advisory locks and found that for a large file such as 2.4Gb of data it took around 16seconds to parse with 20 threads. The time did not improve much after that because of the overhead cost of creating the thread and copying and processing the data was not fast enough to offset the raw computation power of the threads already in place. The results were consistent when I increased the number of threads, which is something very important to test i.e.(NUM_THREADS set to 12 should result in the same vowels as NUM_THREADS set to 20).
+
+The NUM_THREADS is a macro that can be changed in the code.
+
+Also, I have used eclipse IDE for development, I have also set the compilation flag _FILE_OFFSET_BITS=64 to support proper processing of large files.
+I am also assuming that the file we parse supports lseek().
+
+There are other things that I can discuss but due to time constraints we are leaving at that here.
 
 
 
