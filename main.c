@@ -6,6 +6,8 @@
  */
 #define _XOPEN_SOURCE 700
 #define E_NOT_OK (-1)
+#define __USE_LARGEFILE64
+#define __USE_FILE_OFFSET64
 #include <ftw.h>
 
 #include <stdio.h>
@@ -45,6 +47,7 @@ int main(int argc, char ** argv)
 		if(E_NOT_OK != fstat(fd, &fileStats))
 		{
 			size = fileStats.st_size;
+			printf("Size: %lu\n", (uint64_t)fileStats.st_size);
 		}
 
 		/*We apply read lock*/

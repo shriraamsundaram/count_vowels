@@ -4,6 +4,7 @@
  *  Created on: 19 Oct 2022
  *      Author: shriraam-sundaram
  */
+#define _LARGEFILE64_SOURCE
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -30,7 +31,7 @@ void* count_vowels(void * args)
 	if(E_NOT_OK != fd)
 	{
 		char * bufPos = ch;
-		lseek(fd, arguments->startIndex, SEEK_SET);
+		lseek64(fd, arguments->startIndex, SEEK_SET);
 
 		uint64_t totalRead = 0u;
 		for(uint64_t i = 0u; i < NUM_RETRIES; i++)
