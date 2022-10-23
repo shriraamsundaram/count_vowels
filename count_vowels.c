@@ -43,7 +43,6 @@ void* count_vowels(void * args)
 
 				if(E_NOT_OK != actualReadSize)
 				{
-
 					totalRead += actualReadSize;
 					for(uint64_t j = 0u; j < actualReadSize; j++)
 					{
