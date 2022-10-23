@@ -41,6 +41,9 @@ void* count_vowels(void * args)
 				/*We get the actual read size because this is not guaranteed  that size requested = size read in the man page*/
 				ssize_t actualReadSize = read(fd, bufPos, sizeToRead);
 
+				/* We could also try mmap() if we think most of the files are large
+				 * ch = (char *)mmap(0, sizeToRead*sizeof(char), PROT_READ, MAP_SHARED, fd, 0);
+				 */
 				if(E_NOT_OK != actualReadSize)
 				{
 					totalRead += actualReadSize;
@@ -83,5 +86,6 @@ void* count_vowels(void * args)
 	}
 	*(arguments->result) = numVowels;
 	free(ch);
+	//munmap() here if mmap was used;
 	return NULL;
 }
