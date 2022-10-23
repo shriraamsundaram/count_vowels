@@ -47,6 +47,8 @@ int main(int argc, char ** argv)
 
 		if(E_NOT_OK != fstat(fd, &fileStats))
 		{
+			/*For 32 bit systems we might want to use if (size > SSIZE_MAX) size = SSIZE_MAX; if we plan to use a single
+			 * mega thread with one read for now NUM_THREAD is set to 20. Be very careful with 32 bit systems and files larger than 2Gig*/
 			size = fileStats.st_size;
 #if defined(DEBUG_MODE)
 			printf("Size: %lu\n", (uint64_t)fileStats.st_size);
