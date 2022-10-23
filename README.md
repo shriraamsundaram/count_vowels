@@ -73,7 +73,7 @@ Use lseek() to change the position of file descriptor and read byte-by-byte. Thi
 
 We also assume that the size requested to read by a single thread is **less than SSIZE_MAX macro** defined which is approximately 2GB. To handle cases beyond this is not within the scope of the assignment.
 
-So, I introduced multi-threaded using advisory locks and found that for a large file such as 2.4Gb of data it took around 16seconds to parse with 20 threads. The time did not improve much after that because of the overhead cost of creating the thread and copying and processing the data was not fast enough to offset the raw computation power of the threads already in place. The results were consistent when I increased the number of threads, which is something very important to test i.e.(NUM_THREADS set to 12 should result in the same vowels as NUM_THREADS set to 20).
+So, I introduced multi-threaded using advisory locks and found that for a large file such as 2.4Gb of data it took around 4 seconds to parse with 20 threads. The time did not improve much after that because of the overhead cost of creating the thread and copying and processing the data was not fast enough to offset the raw computation power of the threads already in place. The results were consistent when I increased the number of threads, which is something very important to test i.e.(NUM_THREADS set to 12 should result in the same vowels count as NUM_THREADS set to 20).
 
 The NUM_THREADS is a macro that can be changed in the code.
 
