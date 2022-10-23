@@ -80,6 +80,16 @@ The NUM_THREADS is a macro that can be changed in the code.
 Also, I have used eclipse IDE for development, I have also set the compilation flag _FILE_OFFSET_BITS=64 to support proper processing of large files.
 I am also assuming that the file we parse supports lseek().
 
+Final thing to ponder is why use read() and not mmap().
+
+Most important thing to know about mmap() is that reading from and writing to a memory mapped file avoids the excessive copy that occurs when using the read() or write() system calls, where the data must be copied to and from a user space buffer.
+
+mmap() is very fast because it has no context switch overhead or doesn't incur any system call.
+
+But, the problem is mmap() reserves the address space for the entire file, this would mean that in 32 bit systems with a 32 bit address space, a very large file being memory mapped can result in fragmentation of the address space. Though, this problem is less obvious in 64 bit systems. Our goal was to create a portable code, hence I have avoided mmap() in the implementation.
+
+A small files such as 10 bytes will have serious issue of memory wasted. This is because a 10 byte mapping can still cost a reservation of 4089 bytes, this difference of memory is called slack space and it is wasted in case of mmap().
+
 There are other things that I can discuss but due to time constraints we are leaving at that here.
 
 
