@@ -28,10 +28,6 @@
 
 int main(int argc, char ** argv)
 {
-#if defined(DEBUG_MODE)
-	clock_t begin = clock();
-#endif
-
 	pthread_t thread1[NUM_THREADS];
 	COUNT_VOWEL_ThreadArgs_t threadArgs[NUM_THREADS];
 
@@ -113,13 +109,6 @@ int main(int argc, char ** argv)
 		{
 			printf("FAILED TO UNLOCK\n");
 		}
-
-		/* here, do your time-consuming job */
-#if defined(DEBUG_MODE)
-		clock_t end = clock();
-		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-		printf("Total time spent : %f\n", time_spent);
-#endif
 	}
 	return 0;
 }
