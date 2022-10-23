@@ -80,6 +80,8 @@ The NUM_THREADS is a macro that can be changed in the code.
 Also, I have used eclipse IDE for development, I have also set the compilation flag _FILE_OFFSET_BITS=64 to support proper processing of large files.
 I am also assuming that the file we parse supports lseek().
 
+MMAP VS MALLOC: *[IMPORTANT]*
+
 Final thing to ponder is why use read() and not mmap().
 
 Most important thing to know about mmap() is that reading from and writing to a memory mapped file avoids the excessive copy that occurs when using the read() or write() system calls, where the data must be copied to and from a user space buffer.
