@@ -71,7 +71,7 @@ Also Text file has EOF entry which is a macro that returns -1 in the end of the 
 Hence it is better if we used open(2) for opening the file, read(2) for reading the file and close(2) for closing the file.\
 Use lseek() to change the position of file descriptor. Use fstat() to determine the size of the file.
 
-We also assume that the size requested to read by a single thread is **less than SSIZE_MAX macro** defined which is approximately 2GB in **32 BIT SYSTEMS**.
+We also assume that the size requested to read by a single thread is **less than SSIZE_MAX macro** defined which is approximately 2GB in **32 BIT SYSTEMS**. If this is larger then we assume that the number of threads we use is significantly large and well handled by threads. I have made some attempt at explaining this in the code.
 
 So, I introduced multi-threaded using advisory locks and found that for a large file such as 2.4Gb of data it took around 4 seconds to parse with 20 threads. The time did not improve much after that because of the overhead cost of creating the thread and copying and processing the data was not fast enough to offset the raw computation power of the threads already in place. The results were consistent when I increased the number of threads, which is something very important to test i.e.(NUM_THREADS set to 12 should result in the same vowels count as NUM_THREADS set to 20).
 
