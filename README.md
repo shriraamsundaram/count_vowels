@@ -100,6 +100,7 @@ I also happened to fumble upon one of these links which was replied by Linus Tro
 https://marc.info/?l=linux-kernel&m=95496636207616&w=2
 
 **Quote Begin Linus Trovald:**
+
 People love mmap() and other ways to play with the page tables to
 optimize away a copy operation, and sometimes it is worth it.
 
