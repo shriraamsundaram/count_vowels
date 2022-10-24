@@ -31,8 +31,6 @@ int main(int argc, char ** argv)
 	pthread_t thread1[NUM_THREADS];
 	COUNT_VOWEL_ThreadArgs_t threadArgs[NUM_THREADS];
 
-	uint64_t threadVowelCount[10];
-	(void)memset(threadVowelCount, 0, NUM_THREADS*sizeof(uint64_t));
 	int threadRet = 0;
 	int fd = -1;
 	off_t size = 0;
