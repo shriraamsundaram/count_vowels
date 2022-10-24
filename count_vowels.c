@@ -24,12 +24,12 @@ void* count_vowels(void * args)
 	const char * fileName = arguments->fileName;
 
 	uint64_t sizeToRead = (arguments->endIndex - arguments->startIndex);
-	char * ch = malloc(sizeToRead * sizeof(char));
 
 	int fd = open(fileName, O_RDONLY);
 
 	if(E_NOT_OK != fd)
 	{
+		char * ch = malloc(sizeToRead * sizeof(char));
 		char * bufPos = ch;
 		lseek64(fd, arguments->startIndex, SEEK_SET);
 
@@ -83,9 +83,9 @@ void* count_vowels(void * args)
 			}
 		}
 		close(fd);
+		free(ch);
 	}
 	*(arguments->result) = numVowels;
-	free(ch);
 	//munmap() here if mmap was used;
 	return NULL;
 }
