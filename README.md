@@ -96,6 +96,29 @@ I also tried creating an mmap in the beginning of worker thread and unmap in the
 
 Another question that might come is why not mmap the whole file and have multiple threads read, well this could improve the speed but I was worried about using the whole address space for large files (I have not tried this idea).
 
+I also happened to fumble upon one of these links which was replied by Linus Trovald himself on mmaps()
+https://marc.info/?l=linux-kernel&m=95496636207616&w=2
+
+**Quote Begin Linus Trovald:**
+People love mmap() and other ways to play with the page tables to
+optimize away a copy operation, and sometimes it is worth it.
+
+HOWEVER, playing games with the virtual memory mapping is very expensive
+in itself.  It has a number of quite real disadvantages that people tend
+to ignore because memory copying is seen as something very slow, and
+sometimes optimizing that copy away is seen as an obvious improvment. 
+
+Downsides to mmap:
+ - quite noticeable setup and teardown costs. And I mean _noticeable_.
+   It's things like following the page tables to unmap everything
+   cleanly. It's the book-keeping for maintaining a list of all the
+   mappings. It's The TLB flush needed after unmapping stuff. 
+ - page faulting is expensive. That's how the mapping gets populated,
+   and it's quite slow. 
+   
+**Quote End Linus Trovald.**
+
+
 There are other things that I can discuss but due to time constraints we are leaving at that here.
 
 
